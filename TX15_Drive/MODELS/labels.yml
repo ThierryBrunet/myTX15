@@ -1,0 +1,29 @@
+Labels:
+  "default":
+    selected: true
+  "RealFlight":
+  "Foamy":
+  "Favorites":
+Sort: 1
+Models:
+  model1.yml:
+    hash: "1b4a0000445c6a51"
+    name: "AERO"
+    mod0type: 5
+    labels: "default"
+    bitmap: "Flug62.png"
+    lastopen: 1763836097
+  model2.yml:
+    hash: "ec1f0000765b4c93"
+    name: "RealFlight Simu"
+    labels: ""
+    bitmap: "nv1.png"
+    lastopen: 1763836063
+  model3.yml:
+    hash: "c6440000765b6e93"
+    name: "Foamy"
+    mod0type: 5
+    labels: "Foamy"
+    bitmap: "nv2.png"
+    lastopen: 1763711945
+

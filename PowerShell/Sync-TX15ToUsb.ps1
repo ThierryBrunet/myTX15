@@ -23,9 +23,9 @@
 
 [CmdletBinding(SupportsShouldProcess)]
 param(
-    [string] $TxDrivePath = "C:\Users\thier\OneDrive\Workspaces\ExpressLRS\RadioMaster TX15\myTX15\TX15 Drive",
+    [string] $TxDrivePath = "C:\Users\thier\OneDrive\Workspaces\ExpressLRS\RadioMaster TX15\myTX15\TX15_Drive",
     [string] $UsbDrivePath = "D:\",
-    [switch] $WhatIf
+    [switch] $WhatIfx
 )
 
 $ErrorActionPreference = "Stop"
@@ -53,7 +53,9 @@ if ([string]::IsNullOrWhiteSpace($TxDrivePath)) {
 $TxDrivePath = $TxDrivePath.TrimEnd('\') + '\'
 
 # Validate both paths exist
-foreach ($name, $path in @{ "TX Drive" = $TxDrivePath; "USB Drive" = $UsbDrivePath }) {
+foreach ($entry in @{ "TX Drive" = $TxDrivePath; "USB Drive" = $UsbDrivePath }.GetEnumerator()) {
+    $name = $entry.Key
+    $path = $entry.Value
     if (-not (Test-Path -LiteralPath $path -PathType Container)) {
         Write-Error "$name path does not exist or is not accessible: $path"
         exit 1
@@ -76,7 +78,7 @@ $robocopyArgs = @(
     "/NFL"     # no file list (optional; remove for verbose)
 )
 
-if ($WhatIf) {
+if ($WhatIfx) {
     Write-Host "WhatIf: would run robocopy (no files copied)." -ForegroundColor Yellow
     Write-Host "  Phase 1: robocopy `"$TxDrivePath`" `"$UsbDrivePath`" $($robocopyArgs -join ' ')"
     Write-Host "  Phase 2: robocopy `"$UsbDrivePath`" `"$TxDrivePath`" $($robocopyArgs -join ' ')"
@@ -85,19 +87,19 @@ if ($WhatIf) {
 
 # Phase 1: TX Drive -> USB Drive (D:)
 Write-Host "Phase 1: TX Drive -> USB Drive (D:) ..." -ForegroundColor Green
-$rc1 = Start-Process -FilePath "robocopy" -ArgumentList @(
+$argList1 = @(
     [string]::Format('"{0}"', $TxDrivePath.TrimEnd('\')),
-    [string]::Format('"{0}"', $UsbDrivePath.TrimEnd('\')),
-    $robocopyArgs
-) -Wait -NoNewWindow -PassThru
+    [string]::Format('"{0}"', $UsbDrivePath.TrimEnd('\'))
+) + $robocopyArgs
+$rc1 = Start-Process -FilePath "robocopy" -ArgumentList $argList1 -Wait -NoNewWindow -PassThru
 
 # Phase 2: USB Drive (D:) -> TX Drive
 Write-Host "Phase 2: USB Drive (D:) -> TX Drive ..." -ForegroundColor Green
-$rc2 = Start-Process -FilePath "robocopy" -ArgumentList @(
+$argList2 = @(
     [string]::Format('"{0}"', $UsbDrivePath.TrimEnd('\')),
-    [string]::Format('"{0}"', $TxDrivePath.TrimEnd('\')),
-    $robocopyArgs
-) -Wait -NoNewWindow -PassThru
+    [string]::Format('"{0}"', $TxDrivePath.TrimEnd('\'))
+) + $robocopyArgs
+$rc2 = Start-Process -FilePath "robocopy" -ArgumentList $argList2 -Wait -NoNewWindow -PassThru
 
 # Robocopy exit codes: 0–7 = success (with different copy counts), 8+ = errors
 $maxRc = [Math]::Max($rc1.ExitCode, $rc2.ExitCode)
