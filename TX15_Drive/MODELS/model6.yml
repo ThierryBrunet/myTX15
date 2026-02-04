@@ -1,8 +1,8 @@
 semver: 2.12.0
 header: 
-   name: "RealFlight Simu"
-   bitmap: "RedTopW.png"
-   labels: "RealFlight"
+   name: "Angel 30"
+   bitmap: "MiniGreen.png"
+   labels: "Drones"
 telemetryProtocol: 0
 thrTrim: 0
 noGlobalFunctions: 0
@@ -94,7 +94,7 @@ expoData:
    mode: 3
    scale: 0
    trimSource: 0
-   srcRaw: "Ail"
+   srcRaw: "Rud"
    weight: 100
    offset: 0
    swtch: "NONE"
@@ -136,7 +136,7 @@ expoData:
    mode: 3
    scale: 0
    trimSource: 0
-   srcRaw: "Rud"
+   srcRaw: "Ail"
    weight: 100
    offset: 0
    swtch: "NONE"
@@ -146,74 +146,20 @@ expoData:
    chn: 3
    flightModes: 000000000
    name: ""
-flightModeData: 
-   0:
-      trim: 
-         1:
-            value: 4
-            mode: 0
-         2:
-            value: 2
-            mode: 0
-      name: ""
-      swtch: "NONE"
-      fadeIn: 0
-      fadeOut: 0
-      gvars: 
-         0:
-            val: 0
-         1:
-            val: 0
-         2:
-            val: 0
-         3:
-            val: 0
-         4:
-            val: 0
-         5:
-            val: 0
-         6:
-            val: 0
-         7:
-            val: 0
-         8:
-            val: 0
-         9:
-            val: 0
-         10:
-            val: 0
-         11:
-            val: 0
-         12:
-            val: 0
-         13:
-            val: 0
-         14:
-            val: 0
 thrTraceSrc: Thr
 switchWarning: 
    SA:
       pos: up
    SB:
-      pos: up
-   SC:
-      pos: up
+      pos: mid
    SD:
       pos: up
    SE:
-      pos: up
+      pos: mid
    SW1:
       pos: up
    SW2:
-      pos: up
-   SW3:
-      pos: up
-   SW4:
-      pos: up
-   SW5:
-      pos: up
-   SW6:
-      pos: up
+      pos: mid
 rssiSource: none
 rfAlarms: 
    warning: 45
@@ -221,22 +167,28 @@ rfAlarms:
 thrTrimSw: 0
 potsWarnMode: WARN_OFF
 jitterFilter: GLOBAL
-trainerData: 
-   mode: OFF
-   channelsStart: 0
-   channelsCount: -8
-   frameLength: 0
-   delay: 0
-   pulsePol: 0
+moduleData: 
+   0:
+      type: TYPE_CROSSFIRE
+      subType: 0
+      channelsStart: 0
+      channelsCount: 16
+      failsafeMode: NOT_SET
+      mod: 
+         crsf: 
+            telemetryBaudrate: 0
+            crsfArmingMode: 0
+            crsfArmingTrigger: "NONE"
+            spare3: 0
 inputNames: 
    0:
-      val: "Ail"
+      val: "Rud"
    1:
       val: "Ele"
    2:
       val: "Thr"
    3:
-      val: "Rud"
+      val: "Ail"
 potsWarnEnabled: 0
 screenData: 
    0:
@@ -265,30 +217,6 @@ screenData:
                   boolValue: 0
 topbarData: 
    zones: 
-      0:
-         widgetName: BattAnalog
-         widgetData: 
-            options: 
-               0:
-                  type: Source
-                  value: 
-                     source: TX_VOLTAGE
-               1:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 3
-               2:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 3
-               3:
-                  type: Bool
-                  value: 
-                     boolValue: 0
-               4:
-                  type: Color
-                  value: 
-                     color: COLIDX27
       4:
          widgetName: Radio Info
          widgetData: 
@@ -331,10 +259,10 @@ modelRegistrationID: ""
 customSwitches: 
    SW1:
       name: ""
-      type: GLOBAL
-      group: 0
-      start: START_PREVIOUS
-      state: 0
+      type: 2POS
+      group: 1
+      start: START_ON
+      state: 1
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
@@ -347,9 +275,9 @@ customSwitches:
          b: 0
    SW2:
       name: ""
-      type: GLOBAL
-      group: 0
-      start: START_PREVIOUS
+      type: 2POS
+      group: 1
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -363,9 +291,9 @@ customSwitches:
          b: 0
    SW3:
       name: ""
-      type: GLOBAL
-      group: 0
-      start: START_PREVIOUS
+      type: 2POS
+      group: 1
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -379,9 +307,9 @@ customSwitches:
          b: 0
    SW4:
       name: ""
-      type: GLOBAL
-      group: 0
-      start: START_PREVIOUS
+      type: 2POS
+      group: 1
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -395,9 +323,9 @@ customSwitches:
          b: 0
    SW5:
       name: ""
-      type: GLOBAL
-      group: 0
-      start: START_PREVIOUS
+      type: 2POS
+      group: 1
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -411,9 +339,9 @@ customSwitches:
          b: 0
    SW6:
       name: ""
-      type: GLOBAL
-      group: 0
-      start: START_PREVIOUS
+      type: 2POS
+      group: 1
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
@@ -427,7 +355,7 @@ customSwitches:
          b: 0
 cfsGroupOn: 
    1:
-      v: 0
+      v: 1
    2:
       v: 0
    3:

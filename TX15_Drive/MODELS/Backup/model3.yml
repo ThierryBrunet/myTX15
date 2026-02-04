@@ -1,7 +1,7 @@
 semver: 3.0.0
 header: 
    name: "Foamy"
-   bitmap: "nv2.png"
+   bitmap: "MiniGreen.png"
    labels: "Foamy"
 timers: 
    0:

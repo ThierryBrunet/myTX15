@@ -1,4 +1,4 @@
-checksum: 20946
+checksum: 4070
 manuallyEdited: 0
 timezoneMinutes: 0
 ppmunit: 0
@@ -82,7 +82,7 @@ speakerVolume: 20
 vBatMin: 64
 vBatMax: 84
 backlightBright: 59
-globalTimer: 99600
+globalTimer: 100332
 bluetoothBaudrate: 0
 bluetoothMode: OFF
 countryCode: 2
@@ -217,7 +217,7 @@ switchConfig:
          r: 0
          g: 0
          b: 0
-currModelFilename: "model5.yml"
+currModelFilename: "model8.yml"
 blOffBright: 2
 bluetoothName: ""
 ownerRegistrationID: ""
@@ -229,7 +229,7 @@ selectedTheme: "EdgeTX Default"
 labelSingleSelect: 0
 labelMultiMode: 0
 favMultiMode: 0
-modelSelectLayout: 2
+modelSelectLayout: 0
 radioThemesDisabled: 0
 radioGFDisabled: 0
 radioTrainerDisabled: 0
