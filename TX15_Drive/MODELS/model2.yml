@@ -1,8 +1,8 @@
-semver: 3.0.0
+semver: 2.12.0
 header: 
    name: "RealFlight Simu"
-   bitmap: "nv1.png"
-   labels: ""
+   bitmap: "FlightSimu Trainer.png"
+   labels: "RealFlight"
 telemetryProtocol: 0
 thrTrim: 0
 noGlobalFunctions: 0
@@ -240,7 +240,7 @@ inputNames:
 potsWarnEnabled: 0
 screenData: 
    0:
-      LayoutId: "Layout2P1"
+      LayoutId: Layout2P1
       layoutData: 
          options: 
             0:
@@ -266,7 +266,7 @@ screenData:
 topbarData: 
    zones: 
       0:
-         widgetName: "BattAnalog"
+         widgetName: BattAnalog
          widgetData: 
             options: 
                0:
@@ -290,7 +290,7 @@ topbarData:
                   value: 
                      color: COLIDX27
       4:
-         widgetName: "Radio Info"
+         widgetName: Radio Info
          widgetData: 
             options: 
                0:
@@ -306,7 +306,7 @@ topbarData:
                   value: 
                      color: 0x48AC50
       5:
-         widgetName: "Date Time"
+         widgetName: Date Time
          widgetData: 
             options: 
                0:

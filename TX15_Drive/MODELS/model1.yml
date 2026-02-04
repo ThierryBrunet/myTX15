@@ -1,7 +1,7 @@
-semver: 3.0.0
+semver: 2.12.0
 header: 
    name: "AERO"
-   bitmap: "Flug62.png"
+   bitmap: "RadioMaster Default.png"
    labels: "default"
 telemetryProtocol: 0
 thrTrim: 0
@@ -686,11 +686,11 @@ telemetrySensors:
             offset: 0
 screenData: 
    0:
-      LayoutId: "Layout2P1"
+      LayoutId: Layout2P1
       layoutData: 
          zones: 
             0:
-               widgetName: "ModelBmp"
+               widgetName: ModelBmp
                widgetData: 
                   options: 
                      0:
@@ -714,9 +714,15 @@ screenData:
                         value: 
                            boolValue: 1
             1:
-               widgetName: "Timer"
+               widgetName: Timer
+               widgetData: 
+                  options: 
+                     0:
+                        type: Unsigned
+                        value: 
+                           unsignedValue: 0
             2:
-               widgetName: "Outputs"
+               widgetName: Outputs
                widgetData: 
                   options: 
                      0:
@@ -761,11 +767,11 @@ screenData:
                value: 
                   boolValue: 0
    1:
-      LayoutId: "Layout1x1"
+      LayoutId: Layout1x1
       layoutData: 
          zones: 
             0:
-               widgetName: "Outputs"
+               widgetName: Outputs
                widgetData: 
                   options: 
                      0:
@@ -812,7 +818,7 @@ screenData:
 topbarData: 
    zones: 
       3:
-         widgetName: "Value"
+         widgetName: Value
          widgetData: 
             options: 
                0:
@@ -836,7 +842,7 @@ topbarData:
                   value: 
                      unsignedValue: 1
       4:
-         widgetName: "Radio Info"
+         widgetName: Radio Info
          widgetData: 
             options: 
                0:
@@ -852,7 +858,7 @@ topbarData:
                   value: 
                      color: 0x48AC50
       5:
-         widgetName: "Date Time"
+         widgetName: Date Time
          widgetData: 
             options: 
                0:
@@ -872,7 +878,7 @@ topbarWidgetWidth:
       val: 1
    5:
       val: 1
-view: 0
+view: 1
 modelRegistrationID: ""
 customSwitches: 
    SW1:
