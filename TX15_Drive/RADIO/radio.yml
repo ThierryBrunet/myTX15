@@ -1,4 +1,4 @@
-checksum: 4070
+checksum: 43526
 manuallyEdited: 0
 timezoneMinutes: 0
 ppmunit: 0
@@ -82,7 +82,7 @@ speakerVolume: 20
 vBatMin: 64
 vBatMax: 84
 backlightBright: 59
-globalTimer: 100332
+globalTimer: 113441
 bluetoothBaudrate: 0
 bluetoothMode: OFF
 countryCode: 2
@@ -217,7 +217,7 @@ switchConfig:
          r: 0
          g: 0
          b: 0
-currModelFilename: "model8.yml"
+currModelFilename: "model1.yml"
 blOffBright: 2
 bluetoothName: ""
 ownerRegistrationID: ""
@@ -225,7 +225,7 @@ rotEncMode: 0
 stickDeadZone: 0
 imuMax: 0
 imuOffset: 20
-selectedTheme: "EdgeTX Default"
+selectedTheme: "ThierryTX15 Blue Theme"
 labelSingleSelect: 0
 labelMultiMode: 0
 favMultiMode: 0

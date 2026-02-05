@@ -1,43 +1,14 @@
 Labels:
-  "default":
-  "RealFlight":
   "Foamy":
-    selected: true
-  "Favorites":
+  "Drones":
+  "RealFlight":
 Sort: 1
 Models:
   model1.yml:
-    hash: "d34a0000445c306f"
-    name: "AERO"
+    hash: "cb2a0000455c8e72"
+    name: "Angel 30"
     mod0type: 5
-    labels: "default"
-    bitmap: "BlueTop.png"
-    lastopen: 1763836097
-  model2.yml:
-    hash: "ef1f0000445c7d71"
-    name: "RealFlight Simu"
-    labels: "RealFlight"
-    bitmap: "RedTopW.png"
-    lastopen: 1770214272
-  model3.yml:
-    hash: "0b4c0000445c5b6f"
-    name: "Flat Foamy"
-    mod0type: 5
-    labels: "Foamy"
-    bitmap: "FlatFoam.png"
-    lastopen: 1770213493
-  model4.yml:
-    hash: "c1310000445c2771"
-    name: "FX707 Foamy"
-    mod0type: 5
-    labels: "Foamy"
-    bitmap: "FX707.png"
-    lastopen: 1770213788
-  model5.yml:
-    hash: "ae300000445ce571"
-    name: "Mini Foamy"
-    mod0type: 5
-    labels: "Foamy"
-    bitmap: "MiniGreen.png"
-    lastopen: 1770214397
+    labels: "Drones"
+    bitmap: "Angel30.png"
+    lastopen: 1770296477
 

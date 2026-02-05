@@ -1,0 +1,77 @@
+---
+summary:
+  name: Thierry TX15_2
+  author: Thierry Brunet
+  info: Blue theme for RadioMaster TX15 (V2)
+
+# ETX UI elements color variables assignment
+# ------------------------------------------
+colors:
+  PRIMARY1:   0x000000  # Pure black
+# PRIMARY1
+#  Label text
+#  Button text (not focused)
+
+  PRIMARY2:   0xFFFFFF  # Pure white
+# PRIMARY2
+#   ETX Logo icon,
+#   TopBar Icons
+#   TopBar text
+#   TopBar tab name text
+#   BottomBar text
+#   Editable field background
+#   Editable field text (editing)
+#   Button text (focused)
+#   PopUp selectable field background
+#   Trim knob
+#   Slider knob
+
+  PRIMARY3:   0x0C3F66  # Dark blue
+# PRIMARY3
+#   Scroll marker
+#   Inactive part of TopBar icons
+
+  SECONDARY1: 0x125E99  # Medium blue
+# SECONDARY1
+#   TopBar background
+#   BottomBar background
+#   Trim knob path
+#   Trim Knob shadow
+#   Slider path
+#   Slider knob shadow
+
+  SECONDARY2: 0xB6E0F2  # Light blue
+# SECONDARY2
+#   Label background
+#   Button background
+
+  SECONDARY3: 0xE4EEF2  # Very light blue
+# SECONDARY3
+#   Main screen's background
+#   PopUp's background
+
+  FOCUS:      0x14A1E5  # Bright blue
+# FOCUS
+#   ETX Logo background
+#   TopBar icon background (selected)
+#   Label background (focused)
+#   Editable field background (focused)
+#   Trim knob
+#   Slider knob
+
+  EDIT:       0x009909  # Green
+# EDIT
+#   Editable field background (editing)
+
+  ACTIVE:     0xFFDE00  # Golden yellow
+# ACTIVE
+#   Buttons background (button active)
+#   Editable field background (variable active)
+
+  WARNING:    0xE00000  # Red
+# WARNING
+#   Label text (warning)
+
+  DISABLED:   0x8C8C8C  # Gray
+# DISABLED
+#   Disabled elements

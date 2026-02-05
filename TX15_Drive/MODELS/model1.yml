@@ -1,8 +1,21 @@
 semver: 2.12.0
 header: 
-   name: "AERO"
-   bitmap: "BlueTopW.png"
-   labels: "default"
+   name: "Angel 30"
+   bitmap: "Angel30.png"
+   labels: "Drones"
+timers: 
+   0:
+      start: 0
+      swtch: "NONE"
+      value: 3621
+      mode: THR_START
+      countdownBeep: 2
+      minuteBeep: 1
+      persistent: 1
+      countdownStart: 1
+      showElapsed: 0
+      extraHaptic: 1
+      name: "Flight"
 telemetryProtocol: 0
 thrTrim: 0
 noGlobalFunctions: 0
@@ -11,7 +24,7 @@ ignoreSensorIds: 0
 trimInc: 0
 disableThrottleWarning: 0
 displayChecklist: 0
-extendedLimits: 1
+extendedLimits: 0
 extendedTrims: 0
 throttleReversed: 0
 enableCustomThrottleWarning: 0
@@ -23,7 +36,7 @@ beepANACenter: 0
 mixData: 
  -
    destCh: 0
-   srcRaw: "I3"
+   srcRaw: "I0"
    carryTrim: 0
    mixWarn: 0
    mltpx: ADD
@@ -37,7 +50,7 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
+   name: "Roll"
  -
    destCh: 1
    srcRaw: "I1"
@@ -54,7 +67,7 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
+   name: "Pitch"
  -
    destCh: 2
    srcRaw: "I2"
@@ -71,10 +84,10 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
+   name: "Thr"
  -
    destCh: 3
-   srcRaw: "I0"
+   srcRaw: "I3"
    carryTrim: 0
    mixWarn: 0
    mltpx: ADD
@@ -88,94 +101,9 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
+   name: "Yaw"
  -
    destCh: 4
-   srcRaw: "SE"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
- -
-   destCh: 5
-   srcRaw: "SA"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
- -
-   destCh: 6
-   srcRaw: "SB"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
- -
-   destCh: 7
-   srcRaw: "SC"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
- -
-   destCh: 8
-   srcRaw: "SD"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
- -
-   destCh: 9
    srcRaw: "SF"
    carryTrim: 0
    mixWarn: 0
@@ -190,10 +118,10 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
+   name: "Arm"
  -
-   destCh: 10
-   srcRaw: "P1"
+   destCh: 5
+   srcRaw: "SD"
    carryTrim: 0
    mixWarn: 0
    mltpx: ADD
@@ -207,10 +135,10 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
+   name: "Beeper"
  -
-   destCh: 11
-   srcRaw: "P2"
+   destCh: 6
+   srcRaw: "SA"
    carryTrim: 0
    mixWarn: 0
    mltpx: ADD
@@ -224,47 +152,13 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: ""
- -
-   destCh: 14
-   srcRaw: "TILT_X"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
- -
-   destCh: 15
-   srcRaw: "TILT_Y"
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   delayPrec: 0
-   speedPrec: 0
-   flightModes: 000000000
-   weight: 100
-   offset: 0
-   swtch: "NONE"
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
+   name: "Mode"
 expoData: 
  -
    mode: 3
    scale: 0
    trimSource: 0
-   srcRaw: "Rud"
+   srcRaw: "Ail"
    weight: 100
    offset: 0
    swtch: "NONE"
@@ -306,7 +200,7 @@ expoData:
    mode: 3
    scale: 0
    trimSource: 0
-   srcRaw: "Ail"
+   srcRaw: "Rud"
    weight: 100
    offset: 0
    swtch: "NONE"
@@ -316,70 +210,20 @@ expoData:
    chn: 3
    flightModes: 000000000
    name: ""
-customFn: 
-   0:
-      swtch: "ON"
-      func: RGB_LED
-      def: "rainbw,1,On"
-   1:
-      swtch: "SF2"
-      func: PLAY_SCRIPT
-      def: "setGyro,1,1x"
-flightModeData: 
-   0:
-      trim: 
-         0:
-            value: -2
-            mode: 0
-      name: ""
-      swtch: "NONE"
-      fadeIn: 0
-      fadeOut: 0
-      gvars: 
-         0:
-            val: 0
-         1:
-            val: 0
-         2:
-            val: 0
-         3:
-            val: 0
-         4:
-            val: 0
-         5:
-            val: 0
-         6:
-            val: 0
-         7:
-            val: -765
-         8:
-            val: 0
-         9:
-            val: 0
-         10:
-            val: 0
-         11:
-            val: 0
-         12:
-            val: 0
-         13:
-            val: 0
-         14:
-            val: 0
 thrTraceSrc: Thr
 switchWarning: 
    SA:
       pos: up
    SB:
-      pos: up
-   SC:
-      pos: up
+      pos: mid
    SD:
       pos: up
    SE:
+      pos: mid
+   SW1:
       pos: up
-   SF:
-      pos: up
+   SW2:
+      pos: mid
 rssiSource: none
 rfAlarms: 
    warning: 45
@@ -400,293 +244,19 @@ moduleData:
             crsfArmingMode: 0
             crsfArmingTrigger: "NONE"
             spare3: 0
-trainerData: 
-   mode: SLAVE
-   channelsStart: 0
-   channelsCount: 0
-   frameLength: 0
-   delay: 0
-   pulsePol: 0
 inputNames: 
    0:
-      val: "Rud"
+      val: "Ail"
    1:
       val: "Ele"
    2:
       val: "Thr"
    3:
-      val: "Ail"
+      val: "Rud"
 potsWarnEnabled: 0
-telemetrySensors: 
-   0:
-      id1: 
-         id: 20
-      id2: 
-         instance: 0
-      label: "1RSS"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 17
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   1:
-      id1: 
-         id: 20
-      id2: 
-         instance: 1
-      label: "2RSS"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 17
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   2:
-      id1: 
-         id: 20
-      id2: 
-         instance: 2
-      label: "RQly"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 13
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   3:
-      id1: 
-         id: 20
-      id2: 
-         instance: 3
-      label: "RSNR"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 17
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   4:
-      id1: 
-         id: 20
-      id2: 
-         instance: 4
-      label: "ANT"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 0
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   5:
-      id1: 
-         id: 20
-      id2: 
-         instance: 5
-      label: "RFMD"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 0
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   6:
-      id1: 
-         id: 20
-      id2: 
-         instance: 6
-      label: "TPWR"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 16
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   7:
-      id1: 
-         id: 20
-      id2: 
-         instance: 7
-      label: "TRSS"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 17
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   8:
-      id1: 
-         id: 20
-      id2: 
-         instance: 8
-      label: "TQly"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 13
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   9:
-      id1: 
-         id: 20
-      id2: 
-         instance: 9
-      label: "TSNR"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 17
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   10:
-      id1: 
-         id: 8
-      id2: 
-         instance: 0
-      label: "RxBt"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 1
-      prec: 1
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   11:
-      id1: 
-         id: 8
-      id2: 
-         instance: 1
-      label: "Curr"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 2
-      prec: 1
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   12:
-      id1: 
-         id: 8
-      id2: 
-         instance: 2
-      label: "Capa"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 14
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
-   13:
-      id1: 
-         id: 8
-      id2: 
-         instance: 3
-      label: "Bat%"
-      subId: 0
-      type: TYPE_CUSTOM
-      unit: 13
-      prec: 0
-      autoOffset: 0
-      filter: 0
-      logs: 1
-      persistent: 0
-      onlyPositive: 0
-      cfg: 
-         custom: 
-            ratio: 0
-            offset: 0
 screenData: 
    0:
-      LayoutId: Layout2P1
+      LayoutId: Layout2x2
       layoutData: 
          zones: 
             0:
@@ -700,11 +270,11 @@ screenData:
                      1:
                         type: Unsigned
                         value: 
-                           unsignedValue: 5
+                           unsignedValue: 0
                      2:
                         type: Bool
                         value: 
-                           boolValue: 0
+                           boolValue: 1
                      3:
                         type: Color
                         value: 
@@ -714,86 +284,73 @@ screenData:
                         value: 
                            boolValue: 1
             1:
-               widgetName: Timer
+               widgetName: Outputs
                widgetData: 
                   options: 
                      0:
+                        type: Signed
+                        value: 
+                           signedValue: 1
+                     1:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     2:
+                        type: Color
+                        value: 
+                           color: COLIDX5
+                     3:
+                        type: Color
+                        value: 
+                           color: COLIDX0
+                     4:
+                        type: Color
+                        value: 
+                           color: COLIDX3
+            2:
+               widgetName: BattAnalog
+               widgetData: 
+                  options: 
+                     0:
+                        type: Source
+                        value: 
+                           source: I0
+                     1:
                         type: Unsigned
                         value: 
-                           unsignedValue: 0
-            2:
-               widgetName: Outputs
-               widgetData: 
-                  options: 
-                     0:
-                        type: Signed
+                           unsignedValue: 3
+                     2:
+                        type: Unsigned
                         value: 
-                           signedValue: 1
-                     1:
+                           unsignedValue: 3
+                     3:
                         type: Bool
                         value: 
-                           boolValue: 0
-                     2:
-                        type: Color
-                        value: 
-                           color: COLIDX5
-                     3:
-                        type: Color
-                        value: 
-                           color: COLIDX0
+                           boolValue: 1
                      4:
                         type: Color
                         value: 
-                           color: COLIDX3
-         options: 
-            0:
-               type: Bool
-               value: 
-                  boolValue: 1
-            1:
-               type: Bool
-               value: 
-                  boolValue: 1
-            2:
-               type: Bool
-               value: 
-                  boolValue: 1
+                           color: COLIDX2
             3:
-               type: Bool
-               value: 
-                  boolValue: 1
-            4:
-               type: Bool
-               value: 
-                  boolValue: 0
-   1:
-      LayoutId: Layout1x1
-      layoutData: 
-         zones: 
-            0:
-               widgetName: Outputs
+               widgetName: Gauge
                widgetData: 
                   options: 
                      0:
+                        type: Source
+                        value: 
+                           source: I1
+                     1:
                         type: Signed
                         value: 
-                           signedValue: 1
-                     1:
-                        type: Bool
-                        value: 
-                           boolValue: 0
+                           signedValue: -1024
                      2:
-                        type: Color
+                        type: Signed
                         value: 
-                           color: COLIDX5
+                           signedValue: 1024
                      3:
                         type: Color
                         value: 
-                           color: COLIDX0
-                     4:
-                        type: Color
-                        value: 
-                           color: COLIDX3
+                           color: COLIDX9
          options: 
             0:
                type: Bool
@@ -817,30 +374,6 @@ screenData:
                   boolValue: 0
 topbarData: 
    zones: 
-      3:
-         widgetName: Value
-         widgetData: 
-            options: 
-               0:
-                  type: Source
-                  value: 
-                     source: TX_VOLTAGE
-               1:
-                  type: Color
-                  value: 
-                     color: COLIDX1
-               2:
-                  type: Bool
-                  value: 
-                     boolValue: 0
-               3:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 1
-               4:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 1
       4:
          widgetName: Radio Info
          widgetData: 
@@ -878,105 +411,105 @@ topbarWidgetWidth:
       val: 1
    5:
       val: 1
-view: 1
+view: 0
 modelRegistrationID: ""
 customSwitches: 
    SW1:
       name: ""
       type: 2POS
       group: 1
-      start: START_PREVIOUS
+      start: START_ON
       state: 1
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 248
-         g: 220
-         b: 0
+         r: 255
+         g: 255
+         b: 255
       offColor: 
-         r: 16
-         g: 92
-         b: 152
+         r: 0
+         g: 0
+         b: 0
    SW2:
       name: ""
       type: 2POS
       group: 1
-      start: START_PREVIOUS
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
          r: 255
-         g: 136
-         b: 0
+         g: 255
+         b: 255
       offColor: 
-         r: 16
-         g: 92
-         b: 152
+         r: 0
+         g: 0
+         b: 0
    SW3:
       name: ""
       type: 2POS
       group: 1
-      start: START_PREVIOUS
-      state: 0
-      onColorLuaOverride: OFF
-      offColorLuaOverride: OFF
-      onColor: 
-         r: 224
-         g: 0
-         b: 0
-      offColor: 
-         r: 16
-         g: 92
-         b: 152
-   SW4:
-      name: ""
-      type: 2POS
-      group: 1
-      start: START_PREVIOUS
-      state: 0
-      onColorLuaOverride: OFF
-      offColorLuaOverride: OFF
-      onColor: 
-         r: 0
-         g: 152
-         b: 8
-      offColor: 
-         r: 16
-         g: 92
-         b: 152
-   SW5:
-      name: ""
-      type: 2POS
-      group: 1
-      start: START_PREVIOUS
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
          r: 255
-         g: 0
+         g: 255
          b: 255
       offColor: 
-         r: 16
-         g: 92
-         b: 152
-   SW6:
+         r: 0
+         g: 0
+         b: 0
+   SW4:
       name: ""
       type: 2POS
       group: 1
-      start: START_PREVIOUS
+      start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 248
-         g: 252
-         b: 248
+         r: 255
+         g: 255
+         b: 255
       offColor: 
-         r: 16
-         g: 92
-         b: 152
+         r: 0
+         g: 0
+         b: 0
+   SW5:
+      name: ""
+      type: 2POS
+      group: 1
+      start: START_OFF
+      state: 0
+      onColorLuaOverride: OFF
+      offColorLuaOverride: OFF
+      onColor: 
+         r: 255
+         g: 255
+         b: 255
+      offColor: 
+         r: 0
+         g: 0
+         b: 0
+   SW6:
+      name: ""
+      type: 2POS
+      group: 1
+      start: START_OFF
+      state: 0
+      onColorLuaOverride: OFF
+      offColorLuaOverride: OFF
+      onColor: 
+         r: 255
+         g: 255
+         b: 255
+      offColor: 
+         r: 0
+         g: 0
+         b: 0
 cfsGroupOn: 
    1:
       v: 1
