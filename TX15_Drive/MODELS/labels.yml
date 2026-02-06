@@ -1,14 +1,22 @@
 Labels:
   "Foamy":
   "Drones":
+    selected: true
   "RealFlight":
 Sort: 1
 Models:
   model1.yml:
-    hash: "cb2a0000455c8e72"
+    hash: "c8310000455cab98"
+    name: "FX707"
+    mod0type: 5
+    labels: "Foamy"
+    bitmap: "FX707.png"
+    lastopen: 1770317649
+  model2.yml:
+    hash: "a42a0000455cc196"
     name: "Angel 30"
     mod0type: 5
     labels: "Drones"
     bitmap: "Angel30.png"
-    lastopen: 1770296477
+    lastopen: 0
 

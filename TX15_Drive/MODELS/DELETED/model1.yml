@@ -1,21 +1,21 @@
 semver: 2.12.0
 header: 
-   name: "FX707"
-   bitmap: "FX707.png"
-   labels: "Foamy"
+   name: "Angel 30"
+   bitmap: "Angel30.png"
+   labels: "Drones"
 timers: 
    0:
-      start: 360
+      start: 0
       swtch: "NONE"
-      value: 0
-      mode: THR
-      countdownBeep: 0
+      value: 3961
+      mode: THR_START
+      countdownBeep: 2
       minuteBeep: 1
-      persistent: 0
-      countdownStart: 0
+      persistent: 1
+      countdownStart: 1
       showElapsed: 0
-      extraHaptic: 0
-      name: ""
+      extraHaptic: 1
+      name: "Flight"
 telemetryProtocol: 0
 thrTrim: 0
 noGlobalFunctions: 0
@@ -50,7 +50,7 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: "Rudder"
+   name: "Roll"
  -
    destCh: 1
    srcRaw: "I1"
@@ -67,7 +67,7 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: "Elev"
+   name: "Pitch"
  -
    destCh: 2
    srcRaw: "I2"
@@ -84,7 +84,7 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: "Motor"
+   name: "Thr"
  -
    destCh: 3
    srcRaw: "I3"
@@ -101,19 +101,70 @@ mixData:
    delayDown: 0
    speedUp: 0
    speedDown: 0
-   name: "Ail"
+   name: "Yaw"
+ -
+   destCh: 4
+   srcRaw: "SF"
+   carryTrim: 0
+   mixWarn: 0
+   mltpx: ADD
+   delayPrec: 0
+   speedPrec: 0
+   flightModes: 000000000
+   weight: 100
+   offset: 0
+   swtch: "NONE"
+   delayUp: 0
+   delayDown: 0
+   speedUp: 0
+   speedDown: 0
+   name: "Arm"
+ -
+   destCh: 5
+   srcRaw: "SD"
+   carryTrim: 0
+   mixWarn: 0
+   mltpx: ADD
+   delayPrec: 0
+   speedPrec: 0
+   flightModes: 000000000
+   weight: 100
+   offset: 0
+   swtch: "NONE"
+   delayUp: 0
+   delayDown: 0
+   speedUp: 0
+   speedDown: 0
+   name: "Beeper"
+ -
+   destCh: 6
+   srcRaw: "SA"
+   carryTrim: 0
+   mixWarn: 0
+   mltpx: ADD
+   delayPrec: 0
+   speedPrec: 0
+   flightModes: 000000000
+   weight: 100
+   offset: 0
+   swtch: "NONE"
+   delayUp: 0
+   delayDown: 0
+   speedUp: 0
+   speedDown: 0
+   name: "Mode"
 expoData: 
  -
    mode: 3
    scale: 0
    trimSource: 0
-   srcRaw: "Rud"
+   srcRaw: "Ail"
    weight: 100
    offset: 0
    swtch: "NONE"
    curve: 
       type: 1
-      value: 30
+      value: 0
    chn: 0
    flightModes: 000000000
    name: ""
@@ -124,38 +175,10 @@ expoData:
    srcRaw: "Ele"
    weight: 100
    offset: 0
-   swtch: "SC0"
+   swtch: "NONE"
    curve: 
       type: 1
-      value: 30
-   chn: 1
-   flightModes: 000000000
-   name: ""
- -
-   mode: 3
-   scale: 0
-   trimSource: 0
-   srcRaw: "Ele"
-   weight: 75
-   offset: 0
-   swtch: "SC1"
-   curve: 
-      type: 1
-      value: 30
-   chn: 1
-   flightModes: 000000000
-   name: ""
- -
-   mode: 3
-   scale: 0
-   trimSource: 0
-   srcRaw: "Ele"
-   weight: 50
-   offset: 0
-   swtch: "SC2"
-   curve: 
-      type: 1
-      value: 30
+      value: 0
    chn: 1
    flightModes: 000000000
    name: ""
@@ -177,50 +200,30 @@ expoData:
    mode: 3
    scale: 0
    trimSource: 0
-   srcRaw: "Ail"
+   srcRaw: "Rud"
    weight: 100
    offset: 0
-   swtch: "SC0"
+   swtch: "NONE"
    curve: 
       type: 1
-      value: 30
+      value: 0
    chn: 3
    flightModes: 000000000
    name: ""
- -
-   mode: 3
-   scale: 0
-   trimSource: 0
-   srcRaw: "Ail"
-   weight: 75
-   offset: 0
-   swtch: "SC1"
-   curve: 
-      type: 1
-      value: 30
-   chn: 3
-   flightModes: 000000000
-   name: ""
- -
-   mode: 3
-   scale: 0
-   trimSource: 0
-   srcRaw: "Ail"
-   weight: 50
-   offset: 0
-   swtch: "SC2"
-   curve: 
-      type: 1
-      value: 30
-   chn: 3
-   flightModes: 000000000
-   name: ""
-customFn: 
-   0:
-      swtch: "SF2"
-      func: OVERRIDE_CHANNEL
-      def: "2,-100,1"
 thrTraceSrc: Thr
+switchWarning: 
+   SA:
+      pos: up
+   SB:
+      pos: mid
+   SD:
+      pos: up
+   SE:
+      pos: mid
+   SW1:
+      pos: up
+   SW2:
+      pos: mid
 rssiSource: none
 rfAlarms: 
    warning: 45
@@ -241,26 +244,19 @@ moduleData:
             crsfArmingMode: 0
             crsfArmingTrigger: "NONE"
             spare3: 0
-trainerData: 
-   mode: OFF
-   channelsStart: 0
-   channelsCount: -8
-   frameLength: 0
-   delay: 0
-   pulsePol: 0
 inputNames: 
    0:
-      val: "Rud"
+      val: "Ail"
    1:
       val: "Ele"
    2:
       val: "Thr"
    3:
-      val: "Ail"
+      val: "Rud"
 potsWarnEnabled: 0
 screenData: 
    0:
-      LayoutId: Layout2P1
+      LayoutId: Layout2x2
       layoutData: 
          zones: 
             0:
@@ -270,7 +266,7 @@ screenData:
                      0:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX3
                      1:
                         type: Unsigned
                         value: 
@@ -278,81 +274,16 @@ screenData:
                      2:
                         type: Bool
                         value: 
-                           boolValue: 0
+                           boolValue: 1
                      3:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX5
                      4:
                         type: Bool
                         value: 
                            boolValue: 1
             1:
-               widgetName: Timer2
-               widgetData: 
-                  options: 
-                     0:
-                        type: Color
-                        value: 
-                           color: COLIDX2
-                     1:
-                        type: Signed
-                        value: 
-                           signedValue: 2
-                     2:
-                        type: Bool
-                        value: 
-                           boolValue: 1
-            2:
-               widgetName: BattAnalog
-               widgetData: 
-                  options: 
-                     0:
-                        type: Source
-                        value: 
-                           source: NONE
-                     1:
-                        type: Unsigned
-                        value: 
-                           unsignedValue: 1
-                     2:
-                        type: Unsigned
-                        value: 
-                           unsignedValue: 3
-                     3:
-                        type: Bool
-                        value: 
-                           boolValue: 0
-                     4:
-                        type: Color
-                        value: 
-                           color: COLIDX2
-         options: 
-            0:
-               type: Bool
-               value: 
-                  boolValue: 1
-            1:
-               type: Bool
-               value: 
-                  boolValue: 1
-            2:
-               type: Bool
-               value: 
-                  boolValue: 1
-            3:
-               type: Bool
-               value: 
-                  boolValue: 1
-            4:
-               type: Bool
-               value: 
-                  boolValue: 0
-   1:
-      LayoutId: Layout1x1
-      layoutData: 
-         zones: 
-            0:
                widgetName: Outputs
                widgetData: 
                   options: 
@@ -363,19 +294,63 @@ screenData:
                      1:
                         type: Bool
                         value: 
-                           boolValue: 0
+                           boolValue: 1
                      2:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX5
                      3:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX0
                      4:
                         type: Color
                         value: 
-                           color: 0x000000
+                           color: COLIDX3
+            2:
+               widgetName: BattAnalog
+               widgetData: 
+                  options: 
+                     0:
+                        type: Source
+                        value: 
+                           source: I0
+                     1:
+                        type: Unsigned
+                        value: 
+                           unsignedValue: 3
+                     2:
+                        type: Unsigned
+                        value: 
+                           unsignedValue: 3
+                     3:
+                        type: Bool
+                        value: 
+                           boolValue: 1
+                     4:
+                        type: Color
+                        value: 
+                           color: COLIDX2
+            3:
+               widgetName: Gauge
+               widgetData: 
+                  options: 
+                     0:
+                        type: Source
+                        value: 
+                           source: I1
+                     1:
+                        type: Signed
+                        value: 
+                           signedValue: -1024
+                     2:
+                        type: Signed
+                        value: 
+                           signedValue: 1024
+                     3:
+                        type: Color
+                        value: 
+                           color: COLIDX9
          options: 
             0:
                type: Bool
@@ -384,11 +359,11 @@ screenData:
             1:
                type: Bool
                value: 
-                  boolValue: 0
+                  boolValue: 1
             2:
                type: Bool
                value: 
-                  boolValue: 0
+                  boolValue: 1
             3:
                type: Bool
                value: 
@@ -399,54 +374,6 @@ screenData:
                   boolValue: 0
 topbarData: 
    zones: 
-      2:
-         widgetName: Flights
-         widgetData: 
-            options: 
-               0:
-                  type: Source
-                  value: 
-                     source: SF
-               1:
-                  type: Source
-                  value: 
-                     source: ch(2)
-               2:
-                  type: Signed
-                  value: 
-                     signedValue: 30
-               3:
-                  type: Color
-                  value: 
-                     color: 0xF8E440
-               4:
-                  type: Bool
-                  value: 
-                     boolValue: 0
-      3:
-         widgetName: BattAnalog
-         widgetData: 
-            options: 
-               0:
-                  type: Source
-                  value: 
-                     source: TX_VOLTAGE
-               1:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 1
-               2:
-                  type: Unsigned
-                  value: 
-                     unsignedValue: 1
-               3:
-                  type: Bool
-                  value: 
-                     boolValue: 1
-               4:
-                  type: Color
-                  value: 
-                     color: COLIDX29
       4:
          widgetName: Radio Info
          widgetData: 
@@ -496,9 +423,9 @@ customSwitches:
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 0
-         g: 170
-         b: 0
+         r: 255
+         g: 255
+         b: 255
       offColor: 
          r: 0
          g: 0
@@ -514,7 +441,7 @@ customSwitches:
       onColor: 
          r: 255
          g: 255
-         b: 0
+         b: 255
       offColor: 
          r: 0
          g: 0
@@ -528,8 +455,8 @@ customSwitches:
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 170
-         g: 0
+         r: 255
+         g: 255
          b: 255
       offColor: 
          r: 0
@@ -538,14 +465,14 @@ customSwitches:
    SW4:
       name: ""
       type: 2POS
-      group: 2
-      start: START_ON
-      state: 1
+      group: 1
+      start: START_OFF
+      state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
-         r: 0
-         g: 85
+         r: 255
+         g: 255
          b: 255
       offColor: 
          r: 0
@@ -554,15 +481,15 @@ customSwitches:
    SW5:
       name: ""
       type: 2POS
-      group: 2
+      group: 1
       start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
          r: 255
-         g: 85
-         b: 0
+         g: 255
+         b: 255
       offColor: 
          r: 0
          g: 0
@@ -570,15 +497,15 @@ customSwitches:
    SW6:
       name: ""
       type: 2POS
-      group: 2
+      group: 1
       start: START_OFF
       state: 0
       onColorLuaOverride: OFF
       offColorLuaOverride: OFF
       onColor: 
          r: 255
-         g: 0
-         b: 127
+         g: 255
+         b: 255
       offColor: 
          r: 0
          g: 0
@@ -596,11 +523,11 @@ usbJoystickCircularCut: 0
 radioThemesDisabled: GLOBAL
 radioGFDisabled: GLOBAL
 radioTrainerDisabled: GLOBAL
-modelHeliDisabled: OFF
-modelFMDisabled: OFF
+modelHeliDisabled: GLOBAL
+modelFMDisabled: GLOBAL
 modelCurvesDisabled: GLOBAL
-modelGVDisabled: OFF
+modelGVDisabled: GLOBAL
 modelLSDisabled: GLOBAL
 modelSFDisabled: GLOBAL
-modelCustomScriptsDisabled: OFF
+modelCustomScriptsDisabled: GLOBAL
 modelTelemetryDisabled: GLOBAL

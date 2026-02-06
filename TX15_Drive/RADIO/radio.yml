@@ -1,4 +1,4 @@
-checksum: 43526
+checksum: 45037
 manuallyEdited: 0
 timezoneMinutes: 0
 ppmunit: 0
@@ -6,32 +6,32 @@ semver: 2.12.0
 board: tx15
 calib: 
    LH:
-      mid: 1035
-      spanNeg: 639
-      spanPos: 681
+      mid: 1023
+      spanNeg: 1008
+      spanPos: 1008
    LV:
-      mid: 1002
-      spanNeg: 786
-      spanPos: 749
+      mid: 1023
+      spanNeg: 1008
+      spanPos: 1008
    RV:
-      mid: 1028
-      spanNeg: 777
-      spanPos: 745
+      mid: 1023
+      spanNeg: 1008
+      spanPos: 1008
    RH:
-      mid: 1000
-      spanNeg: 662
-      spanPos: 604
+      mid: 1023
+      spanNeg: 1008
+      spanPos: 1008
    P1:
-      mid: 1007
-      spanNeg: 992
-      spanPos: 936
+      mid: 929
+      spanNeg: 743
+      spanPos: 744
    P2:
-      mid: 1019
-      spanNeg: 1004
-      spanPos: 886
+      mid: 1023
+      spanNeg: 1008
+      spanPos: 1008
 vBatWarn: 74
-txVoltageCalibration: -20
-backlightMode: backlight_mode_keys
+txVoltageCalibration: 0
+backlightMode: backlight_mode_all
 antennaMode: MODE_PER_MODEL
 disableRtcWarning: 0
 keysBacklight: 0
@@ -40,7 +40,7 @@ internalModule: TYPE_CROSSFIRE
 trainer: 
    mix: 
       0:
-         srcChn: 3
+         srcChn: 0
          mode: REPL
          studWeight: 100
       1:
@@ -52,7 +52,7 @@ trainer:
          mode: REPL
          studWeight: 100
       3:
-         srcChn: 0
+         srcChn: 3
          mode: REPL
          studWeight: 100
 view: 0
@@ -61,40 +61,40 @@ beepMode: mode_nokeys
 alarmsFlash: 0
 disableMemoryWarning: 0
 disableAlarmWarning: 0
-stickMode: 1
+stickMode: 0
 timezone: 0
 adjustRTC: 0
 inactivityTimer: 10
-internalModuleBaudrate: 3
+internalModuleBaudrate: 1
 splashMode: 0
 hapticMode: mode_nokeys
 switchesDelay: 0
-lightAutoOff: 12
-templateSetup: 21
+lightAutoOff: 2
+templateSetup: 0
 PPM_Multiplier: 0
-hapticLength: 0
-beepLength: 1
+hapticLength: 2
+beepLength: 2
 hapticStrength: 2
-gpsFormat: 1
-audioMuteEnable: 0
+gpsFormat: 0
+audioMuteEnable: 1
 speakerPitch: 0
-speakerVolume: 20
-vBatMin: 64
-vBatMax: 84
-backlightBright: 59
-globalTimer: 113441
+speakerVolume: 12
+vBatMin: 70
+vBatMax: 86
+backlightBright: 50
+globalTimer: 1585
 bluetoothBaudrate: 0
 bluetoothMode: OFF
-countryCode: 2
+countryCode: 0
 pwrOnSpeed: 0
 pwrOffSpeed: 0
-noJitterFilter: 1
+noJitterFilter: 0
 imperial: 0
 disableRssiPoweroffAlarm: 0
 USBMode: 0
 jackMode: 0
 ttsLanguage: "en"
-beepVolume: 3
+beepVolume: 2
 wavVolume: 4
 varioVolume: 2
 backgroundVolume: 3
@@ -107,11 +107,11 @@ serialPort:
       power: 0
 potsConfig: 
    P1:
-      type: with_detent
+      type: without_detent
       inv: 0
       name: ""
    P2:
-      type: with_detent
+      type: without_detent
       inv: 0
       name: ""
 switchConfig: 
@@ -218,14 +218,14 @@ switchConfig:
          g: 0
          b: 0
 currModelFilename: "model1.yml"
-blOffBright: 2
+blOffBright: 20
 bluetoothName: ""
 ownerRegistrationID: ""
 rotEncMode: 0
 stickDeadZone: 0
 imuMax: 0
-imuOffset: 20
-selectedTheme: "ThierryTX15 Blue Theme"
+imuOffset: 0
+selectedTheme: "Thierry TX15"
 labelSingleSelect: 0
 labelMultiMode: 0
 favMultiMode: 0
