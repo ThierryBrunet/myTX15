@@ -1,5 +1,5 @@
-# Sync-TX15ToUsb.ps1
-# Synchronizes EdgeTX configurations from digital twin to physical radio
+# Sync-UsbToTX15.ps1
+# Synchronizes EdgeTX configurations from physical radio to digital twin
 # Mode: Update new files, preserve existing (incremental sync)
 
 #Requires -Version 5.1
@@ -8,11 +8,11 @@ using namespace System.Collections.Generic
 
 <#
 .SYNOPSIS
-    Synchronizes EdgeTX configurations from repository to RadioMaster TX15
+    Synchronizes EdgeTX configurations from RadioMaster TX15 to repository
 .DESCRIPTION
-    Performs incremental synchronization of EdgeTX files from the digital twin
-    (repository) to the physical transmitter. Only copies new or modified files,
-    preserving existing files on the radio.
+    Performs incremental synchronization of EdgeTX files from the physical transmitter
+    to the digital twin (repository). Only copies new or modified files,
+    preserving existing files in the repository.
 .PARAMETER WhatIf
     Show what would be done without making changes
 .PARAMETER Force
@@ -54,7 +54,7 @@ $syncStats = @{
 
 function Main {
     try {
-        Write-SyncLog -Message "Starting TX15 to USB synchronization" -Level Info -Context "Sync"
+        Write-SyncLog -Message "Starting USB to TX15 synchronization" -Level Info -Context "Sync"
 
         # Initialize environment
         if (!(Initialize-SyncEnvironment)) {
@@ -66,15 +66,14 @@ function Main {
             throw "Radio drive $($CONFIG.RadioDrive) is not accessible"
         }
 
-        # Validate source directory
+        # Validate target directory
         if (!(Test-Path $CONFIG.EdgeTXPath)) {
-            throw "Source directory not found: $($CONFIG.EdgeTXPath)"
+            throw "Target directory not found: $($CONFIG.EdgeTXPath)"
         }
 
         # Get confirmation if not forced
         if (!$Force -and !$WhatIf) {
-            $sourceCount = (Get-ChildItem -Path $CONFIG.EdgeTXPath -Recurse -File).Count
-            $message = "Ready to sync $sourceCount files from repository to radio. Continue?"
+            $message = "Ready to sync files from radio to repository. Continue?"
             $choice = Read-Host -Prompt $message
             if ($choice -notmatch "^(y|yes)$") {
                 Write-SyncLog -Message "Synchronization cancelled by user" -Level Info
@@ -83,14 +82,14 @@ function Main {
         }
 
         # Perform synchronization
-        Sync-ToRadio
+        Sync-FromRadio
 
         # Complete statistics
         $syncStats.EndTime = Get-Date
         $syncStats.Duration = $syncStats.EndTime - $syncStats.StartTime
 
         # Display summary
-        $summary = Format-SyncSummary -Stats (Get-SyncStats -Stats $syncStats) -Operation "Repository to Radio"
+        $summary = Format-SyncSummary -Stats (Get-SyncStats -Stats $syncStats) -Operation "Radio to Repository"
         Write-SyncLog -Message $summary -Level Info -Context "Complete"
 
         # Exit with appropriate code
@@ -107,58 +106,64 @@ function Main {
 
 <#
 .SYNOPSIS
-    Performs the actual synchronization from repository to radio
+    Performs the actual synchronization from radio to repository
 .DESCRIPTION
-    Copies new and modified files from EdgeTX directory to radio drive
+    Copies new and modified files from radio drive to EdgeTX directory
 #>
-function Sync-ToRadio {
+function Sync-FromRadio {
     Write-SyncLog -Message "Beginning file synchronization" -Level Info -Context "Sync"
 
     # Define directories to sync
     $syncDirs = @(
         "MODELS",
         "SCRIPTS",
-        "RADIO"
+        "RADIO",
+        "LOGS"
     )
 
     foreach ($dir in $syncDirs) {
-        $sourceDir = Join-Path $CONFIG.EdgeTXPath $dir
-        $targetDir = Join-Path $CONFIG.RadioDrive $dir
+        $sourceDir = Join-Path $CONFIG.RadioDrive $dir
+        $targetDir = Join-Path $CONFIG.EdgeTXPath $dir
 
         if (!(Test-Path $sourceDir)) {
-            Write-SyncLog -Message "Source directory not found: $sourceDir" -Level Warning -Context "Sync"
+            Write-SyncLog -Message "Radio directory not found: $sourceDir" -Level Warning -Context "Sync"
             continue
         }
 
         Write-SyncLog -Message "Syncing directory: $dir" -Level Info -Context "Sync"
 
-        # Get all files in source directory recursively
-        $sourceFiles = Get-ChildItem -Path $sourceDir -Recurse -File
+        # Get all files in radio directory recursively
+        $radioFiles = Get-ChildItem -Path $sourceDir -Recurse -File
 
-        foreach ($sourceFile in $sourceFiles) {
+        foreach ($radioFile in $radioFiles) {
             try {
                 # Calculate relative path from source directory
-                $relativePath = $sourceFile.FullName -replace [regex]::Escape($sourceDir), ""
+                $relativePath = $radioFile.FullName -replace [regex]::Escape($sourceDir), ""
                 $relativePath = $relativePath.TrimStart("\")
                 $targetFile = Join-Path $targetDir $relativePath
+
+                # Skip log files that are auto-generated during sync
+                if ($relativePath -like "sync-logs\*" -or $relativePath -like "sync-*.log") {
+                    continue
+                }
 
                 # Check if target file exists
                 if (Test-Path $targetFile) {
                     # Compare file hashes to detect changes
-                    $sourceHash = Get-FileHash -Path $sourceFile.FullName
+                    $radioHash = Get-FileHash -Path $radioFile.FullName
                     $targetHash = Get-FileHash -Path $targetFile
 
-                    if ($sourceHash -eq $targetHash) {
-                        Write-SyncLog -Message "Skipping unchanged file: $(Get-RelativePath $sourceFile.FullName)" -Level Debug -Context "Sync"
+                    if ($radioHash -eq $targetHash) {
+                        Write-SyncLog -Message "Skipping unchanged file: $relativePath" -Level Debug -Context "Sync"
                         $syncStats.FilesSkipped++
                         continue
                     }
                 }
 
                 # Copy file
-                if ($PSCmdlet.ShouldProcess($targetFile, "Copy from $($sourceFile.FullName)")) {
-                    if (Copy-FileSafe -Source $sourceFile.FullName -Destination $targetFile -Force) {
-                        Write-SyncLog -Message "Copied: $(Get-RelativePath $sourceFile.FullName)" -Level Info -Context "Sync"
+                if ($PSCmdlet.ShouldProcess($targetFile, "Copy from $($radioFile.FullName)")) {
+                    if (Copy-FileSafe -Source $radioFile.FullName -Destination $targetFile -Force) {
+                        Write-SyncLog -Message "Copied: $relativePath" -Level Info -Context "Sync"
                         $syncStats.FilesCopied++
                     } else {
                         $syncStats.Errors++
@@ -167,7 +172,7 @@ function Sync-ToRadio {
 
             }
             catch {
-                Write-SyncLog -Message "Error processing $($sourceFile.FullName): $($_.Exception.Message)" -Level Error -Context "Sync"
+                Write-SyncLog -Message "Error processing $($radioFile.FullName): $($_.Exception.Message)" -Level Error -Context "Sync"
                 $syncStats.Errors++
             }
         }

@@ -1,113 +1,228 @@
+# Sync-TX15ToUsb-Mirror.ps1
+# Mirrors EdgeTX configurations from digital twin to physical radio
+# Mode: Exact copy - removes files not in source (destructive sync)
+
+#Requires -Version 5.1
+
+using namespace System.Collections.Generic
+
 <#
 .SYNOPSIS
-    Force exact clone sync from TX15 Drive to USB Drive.
-
+    Mirrors EdgeTX configurations from repository to RadioMaster TX15
 .DESCRIPTION
-    Uses robocopy with /MIR flag to create an exact mirror of TX Drive on USB Drive.
-    WARNING: This will DELETE files from USB Drive that don't exist on TX Drive!
-    The destination (USB Drive) will be made identical to the source (TX Drive).
-
-.PARAMETER TxDrivePath
-    Path to TX Drive (e.g. E:\ or a path). If not set, the script tries to find a volume with label "TX Drive".
-
-.PARAMETER UsbDrivePath
-    Path to USB drive (default D:).
-
+    Performs exact mirror synchronization of EdgeTX files from the digital twin
+    (repository) to the physical transmitter. Copies new/modified files and
+    removes files that don't exist in the source.
+.WARNING
+    This operation is DESTRUCTIVE - files not in the repository will be deleted from the radio!
 .PARAMETER WhatIf
-    Show what would be synced without copying.
-
-.EXAMPLE
-    .\Sync-TX15ToUsb-Mirror.ps1
-    .\Sync-TX15ToUsb-Mirror.ps1 -TxDrivePath "E:\" -UsbDrivePath "D:\"
+    Show what would be done without making changes
+.PARAMETER Force
+    Skip confirmation prompts (use with extreme caution)
+.PARAMETER Verbose
+    Enable verbose logging
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding(SupportsShouldProcess = $true)]
 param(
-    [string] $TxDrivePath = "C:\Users\thier\OneDrive\Workspaces\ExpressLRS\RadioMaster TX15\myTX15\TX15_Drive",
-    [string] $UsbDrivePath = "D:\",
-    [switch] $WhatIfx
+    [Parameter(Mandatory = $false)]
+    [switch]$WhatIf,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$Force,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$Verbose
 )
 
-$ErrorActionPreference = "Stop"
+# Import common functions
+$commonModule = Join-Path $PSScriptRoot "Core\Common.psm1"
+if (!(Test-Path $commonModule)) {
+    Write-Error "Common module not found at $commonModule"
+    exit 1
+}
+Import-Module $commonModule -Force
 
-# Ensure paths end with backslash for robocopy
-$UsbDrivePath = $UsbDrivePath.TrimEnd('\') + '\'
-
-function Get-TxDriveByLabel {
-    $vol = Get-Volume | Where-Object { $_.FileSystemLabel -eq "TX Drive" } | Select-Object -First 1
-    if ($vol) {
-        $root = $vol.DriveLetter
-        if ($root) { return "${root}:\" }
-    }
-    return $null
+# Sync statistics
+$syncStats = @{
+    FilesCopied = 0
+    FilesSkipped = 0
+    FilesDeleted = 0
+    Errors = 0
+    StartTime = Get-Date
+    EndTime = $null
+    Duration = $null
 }
 
-# Resolve TX Drive path
-if ([string]::IsNullOrWhiteSpace($TxDrivePath)) {
-    $TxDrivePath = Get-TxDriveByLabel
-    if (-not $TxDrivePath) {
-        Write-Error "TX Drive not found. Plug in the RadioMaster TX15 in file transfer mode, or pass -TxDrivePath (e.g. -TxDrivePath 'E:\')."
+function Main {
+    try {
+        Write-SyncLog -Message "Starting TX15 to USB MIRROR synchronization" -Level Warning -Context "Mirror"
+
+        # Initialize environment
+        if (!(Initialize-SyncEnvironment)) {
+            throw "Failed to initialize sync environment"
+        }
+
+        # Check radio drive accessibility
+        if (!(Test-RadioDrive)) {
+            throw "Radio drive $($CONFIG.RadioDrive) is not accessible"
+        }
+
+        # Validate source directory
+        if (!(Test-Path $CONFIG.EdgeTXPath)) {
+            throw "Source directory not found: $($CONFIG.EdgeTXPath)"
+        }
+
+        # DANGER WARNING
+        if (!$Force -and !$WhatIf) {
+            Write-Host ""
+            Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+            Write-Host "!!!                   DANGER WARNING                     !!!" -ForegroundColor Red
+            Write-Host "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" -ForegroundColor Red
+            Write-Host ""
+            Write-Host "This MIRROR operation will DELETE files from your radio that" -ForegroundColor Red
+            Write-Host "do not exist in the repository. This includes any custom" -ForegroundColor Red
+            Write-Host "configurations, logs, or files you've added to the radio." -ForegroundColor Red
+            Write-Host ""
+            Write-Host "Make sure you have backed up any important data first!" -ForegroundColor Yellow
+            Write-Host ""
+
+            $backupChoice = Read-Host -Prompt "Have you backed up your radio data? (yes/no)"
+            if ($backupChoice -notmatch "^(y|yes)$") {
+                Write-SyncLog -Message "Mirror synchronization cancelled - backup not confirmed" -Level Info
+                return
+            }
+
+            $confirmChoice = Read-Host -Prompt "Type 'MIRROR' to confirm destructive operation"
+            if ($confirmChoice -ne "MIRROR") {
+                Write-SyncLog -Message "Mirror synchronization cancelled - confirmation failed" -Level Info
+                return
+            }
+        }
+
+        # Perform mirror synchronization
+        Mirror-ToRadio
+
+        # Complete statistics
+        $syncStats.EndTime = Get-Date
+        $syncStats.Duration = $syncStats.EndTime - $syncStats.StartTime
+
+        # Display summary
+        $summary = Format-SyncSummary -Stats (Get-SyncStats -Stats $syncStats) -Operation "Repository to Radio (MIRROR)"
+        Write-SyncLog -Message $summary -Level Warning -Context "Complete"
+
+        # Exit with appropriate code
+        if ($syncStats.Errors -gt 0) {
+            exit 1
+        }
+
+    }
+    catch {
+        Write-SyncLog -Message "Mirror synchronization failed: $($_.Exception.Message)" -Level Error -Context "Error"
         exit 1
     }
 }
-$TxDrivePath = $TxDrivePath.TrimEnd('\') + '\'
 
-# Validate both paths exist
-foreach ($entry in @{ "TX Drive" = $TxDrivePath; "USB Drive" = $UsbDrivePath }.GetEnumerator()) {
-    $name = $entry.Key
-    $path = $entry.Value
-    if (-not (Test-Path -LiteralPath $path -PathType Container)) {
-        Write-Error "$name path does not exist or is not accessible: $path"
-        exit 1
+<#
+.SYNOPSIS
+    Performs mirror synchronization from repository to radio
+.DESCRIPTION
+    Copies all files from EdgeTX directory to radio and removes extra files
+#>
+function Mirror-ToRadio {
+    Write-SyncLog -Message "Beginning mirror synchronization" -Level Warning -Context "Mirror"
+
+    # Define directories to mirror
+    $syncDirs = @(
+        "MODELS",
+        "SCRIPTS",
+        "RADIO"
+    )
+
+    foreach ($dir in $syncDirs) {
+        $sourceDir = Join-Path $CONFIG.EdgeTXPath $dir
+        $targetDir = Join-Path $CONFIG.RadioDrive $dir
+
+        if (!(Test-Path $sourceDir)) {
+            Write-SyncLog -Message "Source directory not found: $sourceDir" -Level Warning -Context "Mirror"
+            continue
+        }
+
+        Write-SyncLog -Message "Mirroring directory: $dir" -Level Warning -Context "Mirror"
+
+        # Get all source files
+        $sourceFiles = Get-ChildItem -Path $sourceDir -Recurse -File
+        $sourceRelativePaths = $sourceFiles | ForEach-Object {
+            $_.FullName -replace [regex]::Escape($sourceDir), "" | TrimStart "\"
+        }
+
+        # Get all target files
+        if (Test-Path $targetDir) {
+            $targetFiles = Get-ChildItem -Path $targetDir -Recurse -File
+            $targetRelativePaths = $targetFiles | ForEach-Object {
+                $_.FullName -replace [regex]::Escape($targetDir), "" | TrimStart "\"
+            }
+        } else {
+            $targetRelativePaths = @()
+        }
+
+        # Find files to delete (exist in target but not in source)
+        $filesToDelete = $targetRelativePaths | Where-Object { $_ -notin $sourceRelativePaths }
+
+        # Delete extra files
+        foreach ($fileToDelete in $filesToDelete) {
+            $fullPathToDelete = Join-Path $targetDir $fileToDelete
+            try {
+                if ($PSCmdlet.ShouldProcess($fullPathToDelete, "Delete (mirror operation)")) {
+                    Remove-Item -Path $fullPathToDelete -Force
+                    Write-SyncLog -Message "Deleted: $fileToDelete" -Level Info -Context "Mirror"
+                    $syncStats.FilesDeleted++
+                }
+            }
+            catch {
+                Write-SyncLog -Message "Failed to delete $fullPathToDelete`: $($_.Exception.Message)" -Level Error -Context "Mirror"
+                $syncStats.Errors++
+            }
+        }
+
+        # Copy/update files from source
+        foreach ($sourceFile in $sourceFiles) {
+            try {
+                $relativePath = $sourceFile.FullName -replace [regex]::Escape($sourceDir), "" | TrimStart "\"
+                $targetFile = Join-Path $targetDir $relativePath
+
+                # Check if file needs updating
+                $needsUpdate = $true
+                if (Test-Path $targetFile) {
+                    $sourceHash = Get-FileHash -Path $sourceFile.FullName
+                    $targetHash = Get-FileHash -Path $targetFile
+                    $needsUpdate = $sourceHash -ne $targetHash
+                }
+
+                if ($needsUpdate) {
+                    if ($PSCmdlet.ShouldProcess($targetFile, "Copy (mirror from $($sourceFile.FullName))")) {
+                        if (Copy-FileSafe -Source $sourceFile.FullName -Destination $targetFile -Force) {
+                            Write-SyncLog -Message "Copied: $relativePath" -Level Info -Context "Mirror"
+                            $syncStats.FilesCopied++
+                        } else {
+                            $syncStats.Errors++
+                        }
+                    }
+                } else {
+                    Write-SyncLog -Message "Unchanged: $relativePath" -Level Debug -Context "Mirror"
+                    $syncStats.FilesSkipped++
+                }
+
+            }
+            catch {
+                Write-SyncLog -Message "Error processing $($sourceFile.FullName): $($_.Exception.Message)" -Level Error -Context "Mirror"
+                $syncStats.Errors++
+            }
+        }
     }
+
+    Write-SyncLog -Message "Mirror synchronization completed" -Level Warning -Context "Mirror"
 }
 
-Write-Host "FORCE CLONE SYNC: TX Drive -> USB Drive (EXACT MIRROR)" -ForegroundColor Red
-Write-Host "  WARNING: Files on USB Drive that don't exist on TX Drive will be DELETED!" -ForegroundColor Yellow
-Write-Host "  Source (TX Drive): $TxDrivePath"
-Write-Host "  Destination (USB Drive): $UsbDrivePath"
-Write-Host ""
-
-# Confirm destructive operation
-if (-not $WhatIfx) {
-    $confirmation = Read-Host "This will make USB Drive identical to TX Drive. Continue? (yes/no)"
-    if ($confirmation -ne "yes") {
-        Write-Host "Operation cancelled." -ForegroundColor Yellow
-        exit 0
-    }
-}
-
-$robocopyArgs = @(
-    "/MIR",    # mirror - delete files in dest that don't exist in source
-    "/R:2",    # retries
-    "/W:5",    # wait between retries (sec)
-    "/MT:8",   # multi-threaded (faster)
-    "/NP",     # no progress percentage (cleaner log)
-    "/NDL",    # no directory list
-    "/NFL"     # no file list (optional; remove for verbose)
-)
-
-if ($WhatIfx) {
-    Write-Host "WhatIf: would run robocopy (no files copied)." -ForegroundColor Yellow
-    Write-Host "  robocopy `"$TxDrivePath`" `"$UsbDrivePath`" $($robocopyArgs -join ' ')"
-    exit 0
-}
-
-Write-Host "Starting force clone sync (this may take a while)..." -ForegroundColor Green
-
-$argList = @(
-    [string]::Format('"{0}"', $TxDrivePath.TrimEnd('\')),
-    [string]::Format('"{0}"', $UsbDrivePath.TrimEnd('\'))
-) + $robocopyArgs
-
-$rc = Start-Process -FilePath "robocopy" -ArgumentList $argList -Wait -NoNewWindow -PassThru
-
-# Robocopy exit codes: 0–7 = success (with different copy counts), 8+ = errors
-if ($rc.ExitCode -ge 8) {
-    Write-Error "Robocopy failed with exit code $($rc.ExitCode). Check for permission issues or disk space."
-    exit $rc.ExitCode
-}
-else {
-    Write-Host "Force clone sync completed successfully (robocopy code: $($rc.ExitCode))." -ForegroundColor Green
-    Write-Host "USB Drive is now an exact mirror of TX Drive." -ForegroundColor Green
-}
+# Execute main function
+Main

@@ -1,256 +1,346 @@
-# Aircraft Configuration Templates
+# Aircraft Model Templates
 
-## Fixed Wing Template
-````yaml
-model_name: "Generic Plane"
-channels:
-  - CH1: Aileron
-  - CH2: Elevator
-  - CH3: Throttle
-  - CH4: Rudder
-  - CH5: Flaps
-  - CH6: Gear
+## Quadcopter Templates
+
+### 01. Angel30 3-inch Carbon Fiber Frame
+
+#### 01.01 Model Specifications
+- **Frame**: Angel30 3-inch carbon fiber
+- **Flight Controller**: DarwinFPV F415 AIO with integrated ELRS
+- **ESC**: 4-in-1 BLHeli_S ESC
+- **Motors**: 1104 5000KV brushless motors
+- **Propellers**: 3-inch tri-blade
+- **Battery**: 2S LiPo (300-450mAh)
+- **Weight**: 45-65g (ready to fly)
+
+#### 01.02 EdgeTX Model Configuration
+```yaml
+# Angel30-Quad.yml
+name: Angel30-Quad
+model:
+  type: Multirotor
+  subtype: QuadX
+  template: Quadcopter
+
+module:
+  type: CRSF
+  rfProtocol: ExpressLRS
+  channels: 8
+
+controls:
+  aileron: CH1
+  elevator: CH2
+  throttle: CH3
+  rudder: CH4
+
+flightModes:
+  - name: Indoors
+    switch: SA-down
+    curves:
+      throttle: "0,25,50,75,85"
+      pitch: "0,20,40,60,70"
+      roll: "0,20,40,60,70"
+      yaw: "0,25,50,75,85"
+
+  - name: Outdoors
+    switch: SA-mid
+    curves:
+      throttle: "0,35,65,85,95"
+      pitch: "0,30,60,80,90"
+      roll: "0,30,60,80,90"
+      yaw: "0,35,65,85,95"
+
+  - name: Normal
+    switch: SA-up
+    curves:
+      throttle: "0,50,75,90,100"
+      pitch: "0,50,75,90,100"
+      roll: "0,50,75,90,100"
+      yaw: "0,50,75,90,100"
+
+arming:
+  preArm:
+    throttle: min
+    switch: SB-up
+  arm:
+    switch: SC-up
+  throttleCutoff:
+    switch: SF-up
+    channel: CH3
+    value: -100
+```
+
+#### 01.03 Betaflight Passthrough Settings
+```
+# Normal Mode Configuration
+rc_rate: 1.0
+super_rate: 0.7
+expo: 0.3
+
+# Indoors Mode Configuration
+rc_rate: 0.7
+super_rate: 0.5
+expo: 0.4
+
+# Outdoors Mode Configuration
+rc_rate: 0.85
+super_rate: 0.6
+expo: 0.35
+```
+
+## Fixed-Wing Templates
+
+### 02. Flying Bear Fx707s Aircraft
+
+#### 02.01 Model Specifications
+- **Wingspan**: 707mm
+- **Weight**: 180-220g (ready to fly)
+- **Motor**: 2204 2300KV brushless
+- **ESC**: 20A with BEC
+- **Servo**: 9g digital servos (2x elevator, 1x rudder)
+- **Battery**: 2S-3S LiPo (450-850mAh)
+- **Receiver**: Cyclone ELRS (CRSF) or HPXGRC
+- **Gyro**: Reflex V3 Flight Controller
+
+#### 02.02 EdgeTX Model Configuration
+```yaml
+# Fx707s-FixedWing.yml
+name: Fx707s-FixedWing
+model:
+  type: Airplane
+  subtype: Flying-wing
+  template: Flying-wing
+
+module:
+  type: CRSF
+  rfProtocol: ExpressLRS
+  channels: 8
+
+controls:
+  aileron: CH1
+  elevator: CH2
+  throttle: CH3
+  rudder: CH4
+
+flightModes:
+  - name: Beginner
+    switch: SA-down
+    gyro:
+      gain: 80
+      mode: Rate
+    curves:
+      elevator: "-100,-50,0,50,100"
+      aileron: "-70,-35,0,35,70"
+
+  - name: Advanced
+    switch: SA-mid
+    gyro:
+      gain: 50
+      mode: Rate
+    curves:
+      elevator: "-100,-60,0,60,100"
+      aileron: "-85,-45,0,45,85"
+
+  - name: Manual
+    switch: SA-up
+    gyro:
+      gain: 20
+      mode: Manual
+    curves:
+      elevator: "-100,-70,0,70,100"
+      aileron: "-100,-60,0,60,100"
+
+arming:
+  preArm:
+    throttle: min
+    switch: SB-up
+  arm:
+    switch: SC-up
+  throttleCutoff:
+    switch: SF-up
+    channel: CH3
+    value: -100
+```
+
+### 03. 50CM Big Foam Plane
+
+#### 03.01 Model Specifications
+- **Wingspan**: 500mm
+- **Weight**: 120-160g (ready to fly)
+- **Motor**: 1804 2300KV brushless
+- **ESC**: 15A with BEC
+- **Servo**: 9g digital servos (2x elevator, 1x rudder)
+- **Battery**: 2S LiPo (300-450mAh)
+- **Receiver**: Cyclone ELRS (PWM or CRSF)
+- **Gyro**: ICM-20948 Module
+
+#### 03.02 EdgeTX Model Configuration
+```yaml
+# BigFoam-50cm.yml
+name: BigFoam-50cm
+model:
+  type: Airplane
+  subtype: Airplane
+  template: Trainer
+
+module:
+  type: CRSF
+  rfProtocol: ExpressLRS
+  channels: 8
+
+controls:
+  aileron: CH1
+  elevator: CH2
+  throttle: CH3
+  rudder: CH4
+
+flightModes:
+  - name: Beginner
+    switch: SA-down
+    gyro:
+      gain: 85
+      mode: Stabilize
+    curves:
+      elevator: "-80,-40,0,40,80"
+      aileron: "-60,-30,0,30,60"
+
+  - name: Advanced
+    switch: SA-mid
+    gyro:
+      gain: 55
+      mode: Rate
+    curves:
+      elevator: "-90,-50,0,50,90"
+      aileron: "-75,-40,0,40,75"
+
+  - name: Manual
+    switch: SA-up
+    gyro:
+      gain: 25
+      mode: Manual
+    curves:
+      elevator: "-100,-65,0,65,100"
+      aileron: "-90,-50,0,50,90"
+
+arming:
+  preArm:
+    throttle: min
+    switch: SB-up
+  arm:
+    switch: SC-up
+  throttleCutoff:
+    switch: SF-up
+    channel: CH3
+    value: -100
+```
+
+### 04. EDGE540 EPP F3P
+
+#### 04.01 Model Specifications
+- **Wingspan**: 540mm
+- **Weight**: 140-180g (ready to fly)
+- **Motor**: 2203 2600KV brushless
+- **ESC**: 20A with BEC
+- **Servo**: 9g metal gear servos (2x elevator, 1x rudder)
+- **Battery**: 2S-3S LiPo (450-650mAh)
+- **Receiver**: Cyclone ELRS (CRSF)
+- **Gyro**: Reflex V3 Flight Controller
+
+#### 04.02 EdgeTX Model Configuration
+```yaml
+# EDGE540-EPP.yml
+name: EDGE540-EPP
+model:
+  type: Airplane
+  subtype: Airplane
+  template: Acro
+
+module:
+  type: CRSF
+  rfProtocol: ExpressLRS
+  channels: 8
+
+controls:
+  aileron: CH1
+  elevator: CH2
+  throttle: CH3
+  rudder: CH4
+
+flightModes:
+  - name: Beginner
+    switch: SA-down
+    gyro:
+      gain: 70
+      mode: Stabilize
+    curves:
+      elevator: "-100,-50,0,50,100"
+      aileron: "-80,-40,0,40,80"
+
+  - name: Advanced
+    switch: SA-mid
+    gyro:
+      gain: 40
+      mode: Rate
+    curves:
+      elevator: "-100,-60,0,60,100"
+      aileron: "-95,-50,0,50,95"
+
+  - name: Manual
+    switch: SA-up
+    gyro:
+      gain: 15
+      mode: Manual
+    curves:
+      elevator: "-100,-70,0,70,100"
+      aileron: "-100,-60,0,60,100"
+
+arming:
+  preArm:
+    throttle: min
+    switch: SB-up
+  arm:
+    switch: SC-up
+  throttleCutoff:
+    switch: SF-up
+    channel: CH3
+    value: -100
 
 mixes:
-  - Aileron differential: 25%
-  - Flaperons: Optional
-  - Crow braking: CH5 + elevator
+  - output: CH1
+    input: Aileron
+    weight: 100
+    curve: "Diff:15"
 
-flight_modes:
-  - FM0: Normal
-  - FM1: Landing (flaps deployed)
-  - FM2: Acro (high rates)
-````
+  - output: CH2
+    input: Elevator
+    weight: 100
 
-## Quadcopter Template
-````yaml
-model_name: "Generic Quad"
-channels:
-  - CH1: Roll
-  - CH2: Pitch
-  - CH3: Throttle
-  - CH4: Yaw
-  - CH5: Arm switch
-  - CH6: Flight mode
-  - CH7: Beeper
-  - CH8: Turtle mode
+  - output: CH3
+    input: Throttle
+    weight: 100
 
-logical_switches:
-  - L01: Throttle > 10% (for safe arming)
-  - L02: Arm switch ON
-  
-special_functions:
-  - SF1: Play sound on arm (L02)
-  - SF2: Throttle cut on disarm (!L02)
-````
-
-## 3. `mixing-patterns.md` - Common Mixing Scenarios
-````markdown
-# EdgeTX Mixing Patterns
-
-## V-Tail Mixing
-````
-Left V-Tail (CH2):
-- Source: Elevator, Weight: 100%, Offset: 0
-- Source: Rudder, Weight: 50%, Multiplex: Add
-
-Right V-Tail (CH4):
-- Source: Elevator, Weight: 100%, Offset: 0
-- Source: Rudder, Weight: -50%, Multiplex: Add
-````
-
-## Differential Thrust (Twin Motor)
-````
-Left Motor (CH3):
-- Source: Throttle, Weight: 100%
-- Source: Rudder, Weight: 25%, Multiplex: Add
-
-Right Motor (CH7):
-- Source: Throttle, Weight: 100%
-- Source: Rudder, Weight: -25%, Multiplex: Add
-````
-
-## Flaperons
-````
-Left Flap/Aileron (CH6):
-- Source: Aileron, Weight: 100%
-- Source: Flap switch, Weight: 50%, Multiplex: Add
-
-Right Flap/Aileron (CH7):
-- Source: Aileron, Weight: -100%
-- Source: Flap switch, Weight: 50%, Multiplex: Add
-````
-````
-
-## 4. `logical-switches-cookbook.md` - Logic Recipes
-````markdown
-# Logical Switch Cookbook
-
-## Safety: Throttle Hold Until Armed
-````
-L01: Arm switch = ON
-SF1: CH3 (Throttle) Override -100 when !L01
-````
-
-## Timer: Flight Time (Only When Armed + Throttle Active)
-````
-L01: Arm switch = ON
-L02: Throttle > 5%
-L03: L01 AND L02
-Timer1: Trigger on L03
-````
-
-## Alert: Low Battery Warning
-````
-L04: Battery voltage < 3.3V per cell
-SF1: Play sound "lowbat.wav" when L04
-SF2: Vibrate when L04
-````
-
-## Mode Switching: 3-Position Switch to 5 Flight Modes
-````
-L05: SA down
-L06: SA middle  
-L07: SA up
-L08: SB down
-L09: SB up
-
-FM0: !L05 AND !L06 AND !L07  (default)
-FM1: L05 AND !L08
-FM2: L06 AND !L08
-FM3: L07 OR L08
-FM4: L09
-````
-````
-
-## 5. `telemetry-setup.md` - Sensor Configuration
-````markdown
-# Telemetry Sensor Configuration
-
-## ELRS (ExpressLRS) Standard Sensors
-- RSSI: Link quality
-- RSNR: Signal-to-noise ratio
-- ANT: Active antenna
-- RFMD: RF mode (rate)
-- TPWR: TX power
-- TRSS: TX RSSI
-
-## Common Calculated Sensors
-```yaml
-Bat1_Capacity:
-  formula: "Consumption / 1000"
-  unit: "Ah"
-  
-Bat1_Remaining:
-  formula: "(BatteryCapacity - Bat1_Capacity) / BatteryCapacity * 100"
-  unit: "%"
-  
-Flight_Time:
-  formula: "Timer1"
-  unit: "s"
-  
-Distance_Home:
-  formula: "sqrt(GPS_DistN^2 + GPS_DistE^2)"
-  unit: "m"
+  - output: CH4
+    input: Rudder
+    weight: 100
 ```
 
-## Voice Alerts
-````
-Create logical switches:
-- L10: Bat1_Remaining < 50%
-- L11: Bat1_Remaining < 30%
-- L12: Bat1_Remaining < 20%
+## Template Application Guidelines
 
-Special Functions:
-- SF10: Play "bat50.wav" once when L10 activates
-- SF11: Play "bat30.wav" repeat when L11
-- SF12: Play "critical.wav" + vibrate when L12
-````
-````
+### 05.01 Customization Process
+1. **Start with template**: Copy appropriate template configuration
+2. **Hardware matching**: Adjust for specific receiver and gyro
+3. **Flight testing**: Begin with Beginner/Indoors mode
+4. **Progressive tuning**: Gradually increase authority as confidence grows
+5. **Documentation**: Record all changes and flight results
 
-## 6. `lua-scripting.md` - Custom Script Patterns
-````markdown
-# EdgeTX Lua Scripting Guide
+### 05.02 Safety Considerations
+- **Always start conservative**: Beginner modes first
+- **Verify arming**: Test two-step sequence thoroughly
+- **Throttle cutoff**: Confirm emergency shutdown works
+- **Range check**: Verify signal integrity before flight
 
-## Script Locations
-- Widget scripts: `/WIDGETS/`
-- Telemetry scripts: `/SCRIPTS/TELEMETRY/`
-- Function scripts: `/SCRIPTS/FUNCTIONS/`
-- One-time scripts: `/SCRIPTS/TOOLS/`
-
-## Basic Widget Template
-```lua
-local function create()
-  return {}
-end
-
-local function update(widget, options)
-  -- Update logic
-end
-
-local function background(widget)
-  -- Background processing
-end
-
-local function refresh(widget)
-  lcd.clear()
-  -- Draw UI
-end
-
-return { 
-  name="MyWidget", 
-  create=create, 
-  update=update, 
-  background=background, 
-  refresh=refresh 
-}
-```
-
-## Common Telemetry Functions
-```lua
--- Get telemetry value
-local rssi = getValue("RSSI")
-local voltage = getValue("RxBt")
-
--- Get switch position
-local switchSA = getValue("sa")
-
--- Play sound
-playFile("/SOUNDS/en/alert.wav")
-
--- Haptic feedback
-playHaptic(200, 0) -- duration, pause
-```
-````
-
-## 7. `.cursorrules` - AI Instructions
-````markdown
-# EdgeTX Configuration Rules
-
-When working with EdgeTX radio configurations:
-
-1. **Always validate channel assignments** - Ensure channels match receiver expectations
-2. **Use descriptive names** - Models, mixes, and switches should have clear names
-3. **Safety first** - Include throttle cuts, arm switches, and failsafe configurations
-4. **Document complex mixes** - Add comments explaining non-obvious mixing logic
-5. **Test incrementally** - When modifying configs, change one thing at a time
-6. **Backup before changes** - Assume user wants to preserve working configurations
-7. **Follow YAML format** - Use consistent indentation (2 spaces)
-8. **Include units** - Specify percentages, degrees, or absolute values clearly
-9. **Logical switch naming** - Use prefix conventions (L01-L32 for switches)
-10. **Voice alerts** - Suggest audio feedback for critical events
-
-## File Generation
-- Generate `.yml` files for model configurations
-- Create Lua scripts with proper EdgeTX API usage
-- Include comments explaining each section
-
-## Common Pitfalls to Avoid
-- Forgetting to set failsafe values
-- Missing throttle cut on disarm
-- Incorrect servo reversing
-- Overlapping logical switch conditions
-- Missing trim settings for new models
-````
-
-These instruction files would help Claude understand your EdgeTX workflow and generate more accurate, safe, and well-structured radio configurations. You can customize them based on your specific radio models and typical aircraft types.
+### 05.03 Performance Optimization
+- **Rate tuning**: Adjust based on pilot skill level
+- **Curve shaping**: Fine-tune for specific aircraft characteristics
+- **Gyro settings**: Balance stability vs. responsiveness
+- **Failsafe setup**: Configure appropriate safety positions

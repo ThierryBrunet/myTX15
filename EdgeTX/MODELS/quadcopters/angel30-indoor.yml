@@ -1,0 +1,126 @@
+# Angel30 Indoor Configuration
+# Optimized for indoor flying with reduced control authority
+
+name: Angel30-Indoor
+model:
+  type: Multirotor
+  subtype: QuadX
+  rfProtocol: ExpressLRS
+  channels: 8
+
+module:
+  type: CRSF
+  rfProtocol: ExpressLRS
+  channels: 8
+
+controls:
+  aileron: CH1
+  elevator: CH2
+  throttle: CH3
+  rudder: CH4
+
+flightModes:
+  - name: Indoor
+    switch: SA-down
+    active: true
+    curves:
+      throttle: [0, 25, 50, 75, 85]
+      pitch: [0, 20, 40, 60, 70]
+      roll: [0, 20, 40, 60, 70]
+      yaw: [0, 25, 50, 75, 85]
+    trims:
+      pitch: 0
+      roll: 0
+      yaw: 0
+
+logicalSwitches:
+  - name: Arm_Check
+    type: AND
+    conditions:
+      - switch: SB-up
+      - channel: CH3
+        operator: "<"
+        value: 10
+
+  - name: Disarm_Check
+    type: OR
+    conditions:
+      - switch: SF-up
+      - channel: CH3
+        operator: "<"
+        value: 5
+
+specialFunctions:
+  - name: Throttle_Cutoff
+    switch: SF-up
+    type: OverrideCH
+    channel: 3
+    value: -100
+
+  - name: Arming
+    switch: L01  # Arm_Check
+    type: OverrideCH
+    channel: 6
+    value: 100
+
+mixes:
+  - output: CH1
+    input: Roll
+    weight: 50
+    curve: "0,50,75,90,100"
+
+  - output: CH2
+    input: Pitch
+    weight: 50
+    curve: "0,50,75,90,100"
+
+  - output: CH3
+    input: Throttle
+    weight: 100
+    curve: "0,25,50,75,85"
+
+  - output: CH4
+    input: Yaw
+    weight: 50
+    curve: "0,25,50,75,85"
+
+inputs:
+  - name: Roll
+    type: Stick
+    stick: Aileron
+    weight: 100
+
+  - name: Pitch
+    type: Stick
+    stick: Elevator
+    weight: 100
+
+  - name: Throttle
+    type: Stick
+    stick: Throttle
+    weight: 100
+
+  - name: Yaw
+    type: Stick
+    stick: Rudder
+    weight: 100
+
+telemetry:
+  screens:
+    - name: Basic
+      lines:
+        - type: RxBt
+        - type: RSSI
+        - type: Timer1
+
+timers:
+  - name: Flight_Time
+    type: Elapsed
+    persistent: Flight
+    countdownBeep: 30
+
+failsafe:
+  mode: Hold
+  channels:
+    - channel: 3
+      value: -100  # Throttle cutoff on failsafe

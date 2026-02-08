@@ -1,38 +1,128 @@
-# Rules for EdgeTX + ExpressLRS Project – RadioMaster TX15 Setup
+# RC Transmitter Configuration Rules
 
-## Hardware & Version Lock-in
-- Radio: RadioMaster TX15 (H7 processor, color LCD, internal 2.4 GHz ELRS module)
-- EdgeTX: Latest stable non-RC = 2.12.0 (use TX15-specific builds from radiomasterrc.com if official Companion flash not yet fully supports 3.0 UI transition)
-- ExpressLRS: Latest stable non-RC = 3.6.3 (avoid 4.0.x RC series for production flying)
-- ELRS Configurator: Latest stable non-RC = 1.7.11 (or nearest patch)
-- Receivers:
-  - Cyclone PWM 7CH CRSF → Use ELRS target ≈ generic esp8285 7pwm or cyclone-specific if available; output mode = PWM + CRSF telemetry
-  - HPXGRC ELRS Receiver → Standard CRSF/serial target (e.g., esp32 or esp8285 CRSF variants)
-  - DarwinFPV F415 AIO → Target = darwin-f415 or equivalent F4 AIO with integrated ELRS; CRSF to FC UART
+## Transmitter Configuration Standards
 
-## General & Safety Rules
-- Prioritize failsafes: Always configure ELRS failsafe (custom packet or no pulses) + EdgeTX channel failsafe overrides (e.g., throttle -100%, ailerons/elevator neutral).
-- TX15 specifics: Leverage H7 speed → prefer LVGL-based widgets over legacy; enable haptic feedback where useful.
-- Regulatory: Assume FCC region unless specified (higher power options); never exceed legal limits in code/comments.
+### Hardware Specifications
+- **Transmitter**: RadioMaster TX15
+- **Firmware**: EdgeTX (Latest non-RC version for TX15)
+- **Protocol**: ExpressLRS (Latest non-RC version)
+- **Companion Software**: ExpressLRS Companion (Latest non-RC version)
 
-## Lua Scripting Rules (TX15 Color Screen)
-- Use 2-space indentation; full comments including hardware context.
-- API: Target EdgeTX 2.12.0 Lua API (lcd, model.*, getValue for telemetry).
-- ELRS integration: Use official ELRS Lua script (place in /SCRIPTS/TOOLS/); generate variants only for binding/phrase changes.
-- Widgets: Prefer color, LVGL controls; limit refresh rate to avoid UI lag.
-- PWM receivers (Cyclone): Scripts must not assume full telemetry if CRSF not wired; focus on channel monitoring.
-- CRSF receivers (HPXGRC, Darwin F415): Full telemetry support → generate RSSI, battery, GPS scripts.
+### Receiver Hardware Standards
+1. **Cyclone (ELRS 2.4Ghz PWM 7CH CRSF)**: Use 7CH.json for PWM or CRSF.json for CRSF configuration
+2. **HPXGRC 2.4G ExpressLRS ELRS Receiver**: Standard ELRS configuration
+3. **DarwinFPV F415 AIO Flight Controller**: Integrated ELRS with 4-in-1 ESC capabilities
 
-## Model Configuration Rules
-- Inputs/Mixes: Use hardware name prefixes (e.g., CH1_AIL_CYCLONE, CH5_GEAR_HPXGRC).
-- Flight modes: Define clear names (e.g., ACRO, STAB, RTH); include ELRS link quality checks via logical switches.
-- Special Functions: Voice alerts for "ELRS RSSI <  -80 dBm", "Low Battery", "Failsafe Active".
-- Telemetry: Discover sensors automatically; add custom calculated fields (e.g., mAh used if current sensor present).
+### Gyroscope Standards
+- **Reflex V3 Flight Controller Gyro Stabilizer**: Primary for fixed-wing aircraft
+- **ICM-20948 Module**: Preferred for fixed-wing applications (9-axis MEMS)
+- **ICM-45686 Module**: Preferred for vibration-heavy quadcopters (6-axis)
 
-## Prohibited / Risky Practices
-- No 4.0.x ELRS code generation until stable.
-- Avoid blocking Lua calls; test in Companion simulator first.
-- Do not hard-code binding phrases → use placeholders or prompt user.
-- Flag PWM vs CRSF differences in comments (e.g., "PWM-only: no telemetry fallback").
+## Aircraft Model Configuration Rules
 
-When generating, always include compatibility notes for TX15 + 2.12.0 + ELRS 3.6.3.
+### Arming Pattern Requirements
+
+#### Quadcopter Arming (DarwinFPV F415 Compatible)
+- **Two-step arming sequence**:
+  1. **Pre-arm**: Throttle at minimum + specific switch combination
+  2. **Arm**: Additional confirmation step
+- **Throttle cutoff**: Automatic when disarmed
+- **Safety interlocks**: Prevent accidental arming during setup
+
+#### Fixed-Wing Arming (Non-channel 5 dependent)
+- **Two-step arming sequence**:
+  1. **Pre-arm**: Throttle at minimum + dedicated switch
+  2. **Arm**: Separate confirmation switch
+- **Throttle cutoff**: Independent of channel 5 usage
+- **Safety features**: Arming disabled when throttle not at idle
+
+### Flight Configuration Standards
+
+#### Quadcopter Flight Modes
+Each quadcopter model must include three flight configurations:
+
+1. **Indoors Mode**:
+   - Reduced control authority (50-70% of normal)
+   - Limited throttle response
+   - Beginner-friendly settings
+   - Gentle flight characteristics
+
+2. **Outdoors Mode**:
+   - Moderate control authority (70-85% of normal)
+   - Balanced throttle response
+   - Intermediate settings
+   - Suitable for outdoor learning
+
+3. **Normal Mode**:
+   - Full control authority (100% passthrough)
+   - Direct Betaflight configuration mapping
+   - Expert settings
+   - Unrestricted flight capabilities
+
+#### Fixed-Wing Flight Modes (Reflex V3 Compatible)
+Each fixed-wing model must include three flight configurations:
+
+1. **Beginner Mode**:
+   - Maximum gyro assistance
+   - Limited control surfaces
+   - Stability augmentation
+   - Crash-resistant settings
+
+2. **Advanced Mode**:
+   - Moderate gyro assistance
+   - Full control surface authority
+   - Balanced stability
+   - Sport flying capabilities
+
+3. **Full Manual Mode**:
+   - Minimal gyro intervention
+   - Direct control surface response
+   - Manual flying experience
+   - Competition settings
+
+## Transmitter Control Standards
+
+### Mode Switching
+- **Mode 2 to Mode 4 conversion**: Implement via switch as per EdgeTX best practices
+- **Switch assignment**: Dedicated toggle for mode switching
+- **Safety verification**: Test mode switching before flight
+
+### Channel Mapping Standards
+- **Standard channels**: 1-4 (Aileron, Elevator, Throttle, Rudder)
+- **Auxiliary channels**: 5+ for flight modes, arming, etc.
+- **Consistent mapping**: Maintain across all aircraft types
+
+## Synchronization Rules
+
+### Digital Twin Management
+- **Source**: Git repository EdgeTX folder (digital twin)
+- **Target**: RadioMaster TX15 SD card ("d:\" drive)
+- **Synchronization modes**:
+  - SyncToRadio: Update new files, preserve existing
+  - SyncFromRadio: Update new files, preserve existing
+  - MirrorToRadio: Exact copy, remove extras
+  - MirrorFromRadio: Exact copy, remove extras
+
+### File Organization Rules
+- **YAML configurations**: Store in appropriate EdgeTX subfolders
+- **Lua scripts**: Store in EdgeTX SCRIPTS folder
+- **Model files**: Organize by aircraft type and name
+- **Backup strategy**: Maintain version history in git
+
+## Development Workflow Rules
+
+### Tool Usage Standards
+- **PowerShell preference**: Use for file operations, synchronization
+- **Python alternative**: Use when PowerShell limitations encountered
+- **WBS numbering**: Apply xx.xx.xx format for all documentation
+
+### Quality Assurance
+- **Testing requirement**: Verify all configurations before flight
+- **Documentation**: Maintain comprehensive setup instructions
+- **Version control**: Track all configuration changes in git
+
+### Safety Protocols
+- **Pre-flight checks**: Mandatory verification of all settings
+- **Failsafe testing**: Confirm failsafe behavior
+- **Range testing**: Verify signal integrity before flight
+- **Backup configurations**: Maintain known-good configurations

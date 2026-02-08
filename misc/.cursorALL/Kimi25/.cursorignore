@@ -1,0 +1,43 @@
+# Cursor ignore file for TX15 project
+# WBS: 01.01.01
+
+# Backup files
+*.bak
+*.backup
+Backups/
+
+# Logs
+*.log
+LOGS/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# System files
+desktop.ini
+Thumbs.db
+.DS_Store
+System Volume Information
+
+# Audio files (large)
+SOUNDS/**/*.wav
+SOUNDS/**/*.mp3
+
+# Images (except bitmaps)
+IMAGES/**/*.png
+IMAGES/**/*.jpg
+IMAGES/**/*.jpeg
+!IMAGES/**/*.bmp
+
+# Compiled scripts
+*.ps1~
+
+# Git
+.git/
+.gitignore
+
+# Python cache (if any)
+__pycache__/
+*.pyc
